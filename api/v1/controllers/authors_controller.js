@@ -1,3 +1,6 @@
+const bcrypt = require("bcrypt-nodejs");
+const fs = require("fs");
+const path = require("path");
 const Author = require("../models/author_model");
 
 // Get all auhtors route
@@ -51,11 +54,24 @@ module.exports.authors_create_author = async (req, res, next) => {
   }
 
   try {
+    const imagePath = req.file && req.file.filename ? req.file.filename : "";
+
+    // Check if Email exist
+    const users = await Author.find({ email: req.body.email });
+    // Email exist
+    if (users.length > 0) {
+      return res.status(409).json({
+        error: "E-Mail exists"
+      });
+    }
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = await bcrypt.hashSync(req.body.password, salt);
     const author = new Author({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password,
-      imagePath: req.body.imagePath ? req.body.imagePath : ""
+      password: hashedPassword,
+      imagePath
     });
 
     const result = await author.save();
@@ -81,7 +97,36 @@ module.exports.authors_update_author = async (req, res, next) => {
   }
 
   try {
+    // Check if Email exist
+    if (req.body.email) {
+      const users = await Author.find({ email: req.body.email });
+      // Email exist
+      if (users.length > 0) {
+        return res.status(409).json({
+          error: "E-Mail exists"
+        });
+      }
+    }
+
     const newAuthor = req.body;
+    if (req.file && req.file.filename) {
+      newAuthor.imagePath = req.file.filename;
+      const oldData = await Author.findById({ _id: authorId });
+      if (oldData && oldData.imagePath) {
+        const pathDel = path.join(
+          __dirname,
+          "../../../public/images",
+          oldData.imagePath
+        );
+        fs.unlinkSync(pathDel);
+      }
+    }
+
+    if (newAuthor.password) {
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = await bcrypt.hashSync(req.body.password, salt);
+      newAuthor.password = hashedPassword;
+    }
     const result = await Author.updateOne({ _id: authorId }, newAuthor);
     if (result.n) {
       return res.status(200).json({ msg: "Author Updated Successfully" });
@@ -100,6 +145,15 @@ module.exports.authors_update_author = async (req, res, next) => {
 module.exports.authors_delete_author = async (req, res, next) => {
   const authorId = req.params.authorId;
   try {
+    const user = await Author.findById({ _id: authorId });
+    if (user && user.imagePath) {
+      const pathDel = path.join(
+        __dirname,
+        "../../../public/images",
+        user.imagePath
+      );
+      fs.unlinkSync(pathDel);
+    }
     const result = await Author.deleteOne({ _id: authorId });
     if (result.n) {
       return res.status(200).json({ msg: "Author Deleted Successfully" });

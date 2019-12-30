@@ -5,6 +5,8 @@ const app = express();
 
 const categoryRouter = require("./api/v1/routes/categories_route");
 const categoryAdminRouter = require("./api/v1/routes/categories_admin_route");
+const authorRouter = require("./api/v1/routes/authors_route");
+const authorAdminRouter = require("./api/v1/routes/authors_admin_route");
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URL =
@@ -32,6 +34,8 @@ app.use(express.urlencoded({ extended: false }));
 // setup Routes
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/admin/categories", categoryAdminRouter);
+app.use("/api/v1/authors", authorRouter);
+app.use("/api/v1/admin/authors", authorAdminRouter);
 
 // Handle Errors Middlewares
 // 404 Not found
@@ -51,5 +55,5 @@ app.use((err, req, res, next) => {
 
 // setup Server listen port
 app.listen(PORT, err => {
-  if (!err) console.log(`Server running in ${PORT} port`);
+  if (!err) console.log(`Server running on ${PORT} port`);
 });

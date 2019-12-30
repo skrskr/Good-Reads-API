@@ -12,7 +12,8 @@ const authorModel = new mongoose.Schema({
     ]
   },
   password: { type: String, minlength: 8, required: true },
-  imagePath: { type: String }
+  imagePath: { type: String },
+  admin: { type: Boolean, default: false }
 });
 
 const Author = mongoose.model("authors", authorModel);
