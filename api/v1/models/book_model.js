@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const bookModel = new mongoose.Schema({
   name: { type: String, required: true },
-  coverPath: { type: String },
+  coverPath: { type: String, default: "" },
   avgRate: { type: Number, default: 0 },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,

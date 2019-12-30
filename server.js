@@ -7,6 +7,8 @@ const categoryRouter = require("./api/v1/routes/categories_route");
 const categoryAdminRouter = require("./api/v1/routes/categories_admin_route");
 const authorRouter = require("./api/v1/routes/authors_route");
 const authorAdminRouter = require("./api/v1/routes/authors_admin_route");
+const bookRouter = require("./api/v1/routes/books_route");
+const bookAdminRouter = require("./api/v1/routes/books_admin_route");
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URL =
@@ -36,6 +38,8 @@ app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/admin/categories", categoryAdminRouter);
 app.use("/api/v1/authors", authorRouter);
 app.use("/api/v1/admin/authors", authorAdminRouter);
+app.use("/api/v1/books", bookRouter);
+app.use("/api/v1/admin/books", bookAdminRouter);
 
 // Handle Errors Middlewares
 // 404 Not found
