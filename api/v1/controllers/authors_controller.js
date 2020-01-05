@@ -5,6 +5,7 @@ const Author = require("../models/author_model");
 
 // Get all auhtors route
 module.exports.authors_get_all = async (req, res, next) => {
+  /*
   try {
     const authors = await Author.find().select("-__v");
     if (authors) {
@@ -20,6 +21,8 @@ module.exports.authors_get_all = async (req, res, next) => {
       error: error.message
     });
   }
+  */
+  res.status(200).json(res.results);
 };
 
 // Get author by id route

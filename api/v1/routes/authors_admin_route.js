@@ -1,10 +1,16 @@
 const express = require("express");
 const auhtorController = require("../controllers/authors_controller");
 const uploadImage = require("../middlewares/uploadImage_middleware");
+const paginationModel = require("../middlewares/pagination_middleware");
+const Author = require("../models/author_model");
 const auhtorAdminRouter = express.Router();
 
 // Get All Categories
-auhtorAdminRouter.get("/", auhtorController.authors_get_all);
+auhtorAdminRouter.get(
+  "/",
+  paginationModel(Author, null),
+  auhtorController.authors_get_all
+);
 
 // Get Category By Id
 auhtorAdminRouter.get("/:authorId", auhtorController.authors_get_author);

@@ -2,6 +2,7 @@ const Category = require("../models/category_model");
 
 // Get all categories route
 module.exports.categories_get_all = async (req, res, next) => {
+  /*
   try {
     const categories = await Category.find().select("-__v");
     if (categories) {
@@ -16,7 +17,8 @@ module.exports.categories_get_all = async (req, res, next) => {
     return res.status(500).json({
       error: error.message
     });
-  }
+  }*/
+  res.status(200).json(res.results);
 };
 
 // Get category by id route

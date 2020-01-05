@@ -5,6 +5,7 @@ const Book = require("../models/book_model");
 
 // Get all books route
 module.exports.books_get_all = async (req, res, next) => {
+  /*
   try {
     const books = await Book.find().select("-__v");
     if (books) {
@@ -20,6 +21,8 @@ module.exports.books_get_all = async (req, res, next) => {
       error: error.message
     });
   }
+  */
+  res.status(200).json(res.results);
 };
 
 // Get book by id route
